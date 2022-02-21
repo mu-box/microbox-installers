@@ -1,30 +1,59 @@
-FROM nanobox/generic-linux-env
+FROM mubox/generic-linux-env
 
 ARG INSTALLER_VERSION
-ARG NANOBOX_VERSION
+ARG MICROBOX_VERSION
 ARG VIRTUALBOX_VERSION
 ARG VIRTUALBOX_REVISION
 ARG DOCKER_MACHINE_VERSION
 
-# Make directory for file to live in
-RUN mkdir -p /fakeroot/usr/local/bin
+# Make directories for files to live in
+RUN mkdir -p /fakeroot/amd64/usr/local/bin
+RUN mkdir -p /fakeroot/arm/usr/local/bin
+RUN mkdir -p /fakeroot/arm64/usr/local/bin
+RUN mkdir -p /fakeroot/s390x/usr/local/bin
 
-# fetch nanobox
-RUN curl -fsSL -o /fakeroot/usr/local/bin/nanobox "https://s3.amazonaws.com/tools.nanobox.io/nanobox/v$NANOBOX_VERSION/linux/amd64/nanobox"
-# RUN touch nanobox
-RUN chmod +x /fakeroot/usr/local/bin/nanobox
+# fetch microbox
+RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/amd64/microbox"
+RUN chmod +x /fakeroot/amd64/usr/local/bin/microbox
+RUN curl -fsSL -o /fakeroot/arm/usr/local/bin/microbox "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/arm/microbox"
+RUN chmod +x /fakeroot/arm/usr/local/bin/microbox
+RUN curl -fsSL -o /fakeroot/arm64/usr/local/bin/microbox "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/arm64/microbox"
+RUN chmod +x /fakeroot/arm64/usr/local/bin/microbox
+RUN curl -fsSL -o /fakeroot/s390x/usr/local/bin/microbox "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/s390x/microbox"
+RUN chmod +x /fakeroot/s390x/usr/local/bin/microbox
 
-# fetch nanobox-update
-RUN curl -fsSL -o /fakeroot/usr/local/bin/nanobox-update "https://s3.amazonaws.com/tools.nanobox.io/nanobox/v$NANOBOX_VERSION/linux/amd64/nanobox-update"
-RUN chmod +x /fakeroot/usr/local/bin/nanobox-update
+# fetch microbox-update
+RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox-update "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/amd64/microbox-update"
+RUN chmod +x /fakeroot/amd64/usr/local/bin/microbox-update
+RUN curl -fsSL -o /fakeroot/arm/usr/local/bin/microbox-update "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/arm/microbox-update"
+RUN chmod +x /fakeroot/arm/usr/local/bin/microbox-update
+RUN curl -fsSL -o /fakeroot/arm64/usr/local/bin/microbox-update "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/arm64/microbox-update"
+RUN chmod +x /fakeroot/arm64/usr/local/bin/microbox-update
+RUN curl -fsSL -o /fakeroot/s390x/usr/local/bin/microbox-update "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/s390x/microbox-update"
+RUN chmod +x /fakeroot/s390x/usr/local/bin/microbox-update
 
 # fetch openvpn
-RUN curl -fsSL -o /fakeroot/usr/local/bin/nanobox-vpn "https://s3.amazonaws.com/tools.nanobox.io/openvpn/linux/openvpn"
-RUN chmod +x /fakeroot/usr/local/bin/nanobox-vpn
+RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox-vpn "https://s3.amazonaws.com/tools.microbox.cloud/openvpn/linux/amd64/openvpn"
+RUN chmod +x /fakeroot/amd64/usr/local/bin/microbox-vpn
+RUN curl -fsSL -o /fakeroot/arm/usr/local/bin/microbox-vpn "https://s3.amazonaws.com/tools.microbox.cloud/openvpn/linux/arm/openvpn"
+RUN chmod +x /fakeroot/arm/usr/local/bin/microbox-vpn
+RUN curl -fsSL -o /fakeroot/arm64/usr/local/bin/microbox-vpn "https://s3.amazonaws.com/tools.microbox.cloud/openvpn/linux/arm64/openvpn"
+RUN chmod +x /fakeroot/arm64/usr/local/bin/microbox-vpn
+RUN curl -fsSL -o /fakeroot/s390x/usr/local/bin/microbox-vpn "https://s3.amazonaws.com/tools.microbox.cloud/openvpn/linux/s390x/openvpn"
+RUN chmod +x /fakeroot/s390x/usr/local/bin/microbox-vpn
 
 # fetch docker-machine
-RUN curl -fsSL -o /fakeroot/usr/local/bin/nanobox-machine "https://github.com/docker/machine/releases/download/v$DOCKER_MACHINE_VERSION/docker-machine-Linux-x86_64"
-RUN chmod +x /fakeroot/usr/local/bin/nanobox-machine
+RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox-machine "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-x86_64"
+RUN chmod +x /fakeroot/amd64/usr/local/bin/microbox-machine
+RUN curl -fsSL -o /fakeroot/arm/usr/local/bin/microbox-machine "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-armhf"
+RUN chmod +x /fakeroot/arm/usr/local/bin/microbox-machine
+RUN curl -fsSL -o /fakeroot/arm64/usr/local/bin/microbox-machine "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-aarch64"
+RUN chmod +x /fakeroot/arm64/usr/local/bin/microbox-machine
+# THERE IS NO DOCKER-MACHINE FOR THE S390X, SO WE SIMPLY LEAVE IT OUT FOR NOW.
+# EVENTUALLY, DOCKER-MACHINE WILL BE REMOVED FROM ALL VARIANTS OF MICROBOX, BUT ONE STEP AT A TIME.
 
 # Create Package
-RUN tar -czf /nanobox-$INSTALLER_VERSION.tar.gz -C /fakeroot usr
+RUN tar -czf /microbox-${INSTALLER_VERSION}-amd64.tar.gz -C /fakeroot/amd64 usr
+RUN tar -czf /microbox-${INSTALLER_VERSION}-arm.tar.gz -C /fakeroot/arm usr
+RUN tar -czf /microbox-${INSTALLER_VERSION}-arm64.tar.gz -C /fakeroot/arm64 usr
+RUN tar -czf /microbox-${INSTALLER_VERSION}-s390x.tar.gz -C /fakeroot/s390x usr

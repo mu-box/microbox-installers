@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pkg-info overwrite-permissions="true" relocatable="false" identifier="cloud.microbox.pkg.microbox" postinstall-action="none" version="%MICROBOX_VERSION%" format-version="2" generator-version="1" install-location="/" auth="root">
+    <payload numberOfFiles="%MICROBOX_NUMBER_OF_FILES%" installKBytes="%MICROBOX_INSTALL_KBYTES%"/>
+    <bundle-version/>
+    <upgrade-bundle/>
+    <update-bundle/>
+    <atomic-update-bundle/>
+    <strict-identifier/>
+    <relocate/>
+</pkg-info>

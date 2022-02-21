@@ -1,10 +1,13 @@
-'nanobox_title' = 'Nanobox';
+'microbox_title' = 'Microbox';
 
-'choiceNanobox_title' = 'Nanobox v%NANOBOX_VERSION%';
-'choiceNanobox_msg' = 'Installs Nanobox for Mac OS X into /usr/local/bin/';
+'choiceMicroboxAmd64_title' = 'Microbox v%MICROBOX_VERSION% amd64';
+'choiceMicroboxAmd64_msg' = 'Installs Microbox for Intel Mac OS X into /usr/local/bin/';
+
+'choiceMicroboxArm64_title' = 'Microbox v%MICROBOX_VERSION% arm64';
+'choiceMicroboxArm64_msg' = 'Installs Microbox for M1 Mac OS X into /usr/local/bin/';
 
 'UNSUPPORTED_HW_MACHINE_TLE' = "Unsupported hardware architecture detected!";
-'UNSUPPORTED_HW_MACHINE_MSG' = "The installer has detected an unsupported architecture. VirtualBox only runs on the x86 and amd64 architectures.";
+'UNSUPPORTED_HW_MACHINE_MSG' = "The installer has detected an unsupported architecture. Microbox only runs on the amd64 (Intel) and arm64 (M1) architectures.";
 
 'UNSUPPORTED_OS_TLE' = "Unsupported OS version detected!";
-'UNSUPPORTED_OS_MSG' = "The installer has detected an unsupported operation system. Please upgrade to Mac OS X 10.8 or later.";
+'UNSUPPORTED_OS_MSG' = "The installer has detected an unsupported operating system. Please upgrade to Mac OS X 10.8 or later.";

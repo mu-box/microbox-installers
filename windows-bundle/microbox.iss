@@ -1,14 +1,14 @@
-#define MyAppName "Nanobox"
-#define MyInstallerName "NanoboxSetup"
-#define MyAppPublisher "Pagoda Box Inc."
-#define MyAppURL "https://nanobox.io"
-#define MyAppContact "https://nanobox.io"
+#define MyAppName "Microbox"
+#define MyInstallerName "MicroboxSetup"
+#define MyAppPublisher "Microbox Developers"
+#define MyAppURL "https://microbox.cloud"
+#define MyAppContact "https://microbox.cloud"
 
-#define nanobox "..\bundle\nanobox.exe"
-#define nanoboxUpdater "..\bundle\nanobox-update.exe"
-#define nanoboxVpn "..\bundle\nanobox-vpn.exe"
-#define nanoboxMachine "..\bundle\nanobox-machine.exe"
-#define virtualBoxCommon "..\bundle\common.cab"
+#define microbox "..\bundle\microbox.exe"
+#define microboxUpdater "..\bundle\microbox-update.exe"
+#define microboxVpn "..\bundle\microbox-vpn.exe"
+#define microboxMachine "..\bundle\microbox-machine.exe"
+; #define virtualBoxCommon "..\bundle\common.cab"
 #define virtualBoxMsi "..\bundle\VirtualBox_amd64.msi"
 #define ansiconexe "..\bundle\ansicon.exe"
 #define ansicon32 "..\bundle\ANSI32.dll"
@@ -45,7 +45,7 @@ WizardImageFile=windows-installer-side.bmp
 WizardSmallImageFile=windows-installer-logo.bmp
 WizardImageStretch=yes
 UninstallDisplayIcon={app}\unins000.exe
-SetupIconFile=nanobox.ico
+SetupIconFile=microbox.ico
 ChangesEnvironment=true
 
 [Languages]
@@ -56,40 +56,40 @@ Name: "full"; Description: "Full installation"
 Name: "custom"; Description: "Custom installation"; Flags: iscustom
 
 [Tasks]
-Name: modifypath; Description: "Add nanobox binaries to &PATH"
+Name: modifypath; Description: "Add microbox binaries to &PATH"
 Name: upgradevm; Description: "Upgrade Boot2Docker VM"
 Name: vbox_ndis5; Description: "Install VirtualBox with NDIS5 driver[default NDIS6]"; Components: VirtualBox; Flags: unchecked
 Name: ansicon; Description: "Install ANSI escape sequences for console programs"
 
 [Components]
-Name: "Nanobox"; Description: "Nanobox for Windows" ; Types: full custom; Flags: fixed
+Name: "Microbox"; Description: "Microbox for Windows" ; Types: full custom; Flags: fixed
 Name: "VirtualBox"; Description: "VirtualBox"; Types: full custom; Flags: disablenouninstallwarning
 
 [Files]
-Source: "{#nanobox}"; DestDir: "{app}"; Flags: ignoreversion; Components: "Nanobox"
-Source: "{#nanoboxUpdater}"; DestDir: "{app}"; Flags: ignoreversion; Components: "Nanobox"
-Source: "{#nanoboxVpn}"; DestDir: "{app}"; Flags: ignoreversion; Components: "Nanobox"
-Source: "{#nanoboxMachine}"; DestDir: "{app}"; Flags: ignoreversion; Components: "Nanobox"
-Source: "{#virtualBoxCommon}"; DestDir: "{app}\installers\virtualbox"; Components: "VirtualBox"
+Source: "{#microbox}"; DestDir: "{app}"; Flags: ignoreversion; Components: "Microbox"
+Source: "{#microboxUpdater}"; DestDir: "{app}"; Flags: ignoreversion; Components: "Microbox"
+Source: "{#microboxVpn}"; DestDir: "{app}"; Flags: ignoreversion; Components: "Microbox"
+Source: "{#microboxMachine}"; DestDir: "{app}"; Flags: ignoreversion; Components: "Microbox"
+; Source: "{#virtualBoxCommon}"; DestDir: "{app}\installers\virtualbox"; Components: "VirtualBox"
 Source: "{#virtualBoxMsi}"; DestDir: "{app}\installers\virtualbox"; DestName: "virtualbox.msi"; AfterInstall: RunInstallVirtualBox(); Components: "VirtualBox"
-Source: "{#ansiconexe}"; DestDir: "{app}"; Components: "Nanobox"
-Source: "{#ansicon32}"; DestDir: "{app}"; Components: "Nanobox"
-Source: "{#ansicon64}"; DestDir: "{app}"; Components: "Nanobox"
-Source: "{#loggerdll}"; DestDir: "{app}"; Components: "Nanobox"
-Source: "{#srvstartdll}"; DestDir: "{app}"; Components: "Nanobox"
-Source: "{#srvstartexe}"; DestDir: "{app}"; Components: "Nanobox"
-Source: "{#oemvistainf}"; DestDir: "{app}"; Components: "Nanobox"
-Source: "{#tap0901cat}"; DestDir: "{app}"; Components: "Nanobox"
-Source: "{#tap0901sys}"; DestDir: "{app}"; Components: "Nanobox"
-Source: "{#tapinstallexe}"; DestDir: "{app}"; Components: "Nanobox"
+Source: "{#ansiconexe}"; DestDir: "{app}"; Components: "Microbox"
+Source: "{#ansicon32}"; DestDir: "{app}"; Components: "Microbox"
+Source: "{#ansicon64}"; DestDir: "{app}"; Components: "Microbox"
+Source: "{#loggerdll}"; DestDir: "{app}"; Components: "Microbox"
+Source: "{#srvstartdll}"; DestDir: "{app}"; Components: "Microbox"
+Source: "{#srvstartexe}"; DestDir: "{app}"; Components: "Microbox"
+Source: "{#oemvistainf}"; DestDir: "{app}"; Components: "Microbox"
+Source: "{#tap0901cat}"; DestDir: "{app}"; Components: "Microbox"
+Source: "{#tap0901sys}"; DestDir: "{app}"; Components: "Microbox"
+Source: "{#tapinstallexe}"; DestDir: "{app}"; Components: "Microbox"
 
 [UninstallRun]
-Filename: "{app}\nanobox.exe"; Parameters: "implode"
+Filename: "{app}\microbox.exe"; Parameters: "implode"
 Filename: "{app}\ansicon.exe"; Parameters: "-U"
 Filename: "{app}\tapinstall.exe"; Parameters: "remove tap0901"
 
 [Registry]
-Root: HKCU; Subkey: "Environment"; ValueType:string; ValueName:"NANOBOX_INSTALL_PATH"; ValueData:"{app}" ; Flags: preservestringtype uninsdeletevalue;
+Root: HKCU; Subkey: "Environment"; ValueType:string; ValueName:"MICROBOX_INSTALL_PATH"; ValueData:"{app}" ; Flags: preservestringtype uninsdeletevalue;
 
 [Code]
 #include "base64.iss"
@@ -101,7 +101,7 @@ var
   filepath: String;
   ansiresult: AnsiString;
 begin
-  dirpath := ExpandConstant('{userappdata}\Nanobox');
+  dirpath := ExpandConstant('{userappdata}\Microbox');
   filepath := dirpath + '\id.txt';
   ForceDirectories(dirpath);
 
@@ -182,7 +182,7 @@ function CanUpgradeVM(): Boolean;
 var
   ResultCode: Integer;
 begin
-  if NeedToInstallVirtualBox() or not FileExists(ExpandConstant('{app}\nanobox-machine.exe')) then begin
+  if NeedToInstallVirtualBox() or not FileExists(ExpandConstant('{app}\microbox-machine.exe')) then begin
     Result := false
     exit
   end;
@@ -206,7 +206,7 @@ var
   ResultCode: Integer;
 begin
   WizardForm.StatusLabel.Caption := 'Upgrading Docker Toolbox VM...'
-  ExecAsOriginalUser(ExpandConstant('{app}\nanobox-machine.exe'), 'stop default', '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
+  ExecAsOriginalUser(ExpandConstant('{app}\microbox-machine.exe'), 'stop default', '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
   if not ((ResultCode = 0) or (ResultCode = 1)) then
   begin
     MsgBox('VM Upgrade Failed because the VirtualBox VM could not be stopped.', mbCriticalError, MB_OK);

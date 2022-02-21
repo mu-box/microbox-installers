@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  repository_dispatch:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }} Installer
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - mac
+          - mac-bundle
+          - windows
+          - windows-bundle
+          - arch
+          - centos
+          - debian
+          - generic-linux
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+
+        # the default image for act doesn't include this tool, but the actual GHA environment does...
+      - name: (LOCAL ONLY) Install AWS CLI
+        if: github.actor == 'nektos/act'
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -q awscliv2.zip
+          sudo ./aws/install
+
+      - name: Configure AWS credentials for certs
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/s3-read
+          role-duration-seconds: 1200
+          aws-region: us-west-1
+
+      - name: Build
+        run: |
+          make ${{ matrix.target }}
+
+      - name: Configure AWS credentials for publication
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/s3-write
+          role-duration-seconds: 1200
+          aws-region: us-east-1
+
+      - name: Publish Beta
+        if: github.event_name == 'pull_request'
+        run: |
+          make publish-beta
+
+      - name: Publish
+        if: github.event_name != 'pull_request'
+        run: |
+          make publish

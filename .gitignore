@@ -17,7 +17,6 @@ profile
 
 # output
 dist
-
 certs
 
 # release
@@ -25,7 +24,7 @@ certs
 
 # vagrant
 .vagrant
-
+.secrets
+.env
 virtualbox
-
-mac/mpkg/nanobox.pkg/Scripts
+mac/mpkg/microbox.pkg/Scripts

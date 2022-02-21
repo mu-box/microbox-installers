@@ -1,7 +1,7 @@
-FROM nanobox/windows-env
+FROM mubox/windows-env
 
 ARG INSTALLER_VERSION
-ARG NANOBOX_VERSION
+ARG MICROBOX_VERSION
 ARG VIRTUALBOX_VERSION
 ARG VIRTUALBOX_REVISION
 ARG DOCKER_MACHINE_VERSION
@@ -10,21 +10,20 @@ RUN mkdir /bundle
 
 WORKDIR /bundle
 
-# fetch nanobox
-RUN curl -fsSL -o nanobox.exe "https://s3.amazonaws.com/tools.nanobox.io/nanobox/v$NANOBOX_VERSION/windows/amd64/nanobox.exe"
-# RUN touch nanobox.exe
+# fetch microbox
+RUN curl -fsSL -o microbox.exe "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/windows/amd64/microbox.exe"
 
-# fetch nanobox-update
-RUN curl -fsSL -o nanobox-update.exe "https://s3.amazonaws.com/tools.nanobox.io/nanobox/v$NANOBOX_VERSION/windows/amd64/nanobox-update.exe"
+# fetch microbox-update
+RUN curl -fsSL -o microbox-update.exe "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/windows/amd64/microbox-update.exe"
 
 # fetch openvpn
-RUN curl -fsSL -o nanobox-vpn.exe "https://s3.amazonaws.com/tools.nanobox.io/openvpn/windows/openvpn.exe"
+RUN curl -fsSL -o microbox-vpn.exe "https://s3.amazonaws.com/tools.microbox.cloud/openvpn/windows/amd64/openvpn.exe"
 
 # fetch srvstart
 RUN curl -fsSL -o srvstart_run.v110.zip "http://www.zen18887.zen.co.uk/nick/binaries/srvstart_run.v110.zip"
 
 # fetch docker-machine
-RUN curl -fsSL -o nanobox-machine.exe "https://github.com/docker/machine/releases/download/v$DOCKER_MACHINE_VERSION/docker-machine-Windows-x86_64.exe"
+RUN curl -fsSL -o microbox-machine.exe "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Windows-x86_64.exe"
 
 # fetch ansicon
 RUN curl -fsSL -o ansi166.zip "https://github.com/adoxa/ansicon/releases/download/v1.66/ansi166.zip"
@@ -49,26 +48,57 @@ RUN cp driver/tap0901.cat /bundle
 RUN cp driver/tap0901.sys /bundle
 
 # fetch virtualbox
-#RUN curl -fsSL -o virtualbox.exe "http://download.virtualbox.org/virtualbox/$VIRTUALBOX_VERSION/VirtualBox-$VIRTUALBOX_VERSION-$VIRTUALBOX_REVISION-Win.exe"
-COPY /virtualbox/VirtualBox-$VIRTUALBOX_VERSION-$VIRTUALBOX_REVISION-Win.exe /bundle/virtualbox.exe
+#RUN curl -fsSL -o virtualbox.exe "http://download.virtualbox.org/virtualbox/${VIRTUALBOX_VERSION}/VirtualBox-${VIRTUALBOX_VERSION}-${VIRTUALBOX_REVISION}-Win.exe"
+COPY /virtualbox/VirtualBox-${VIRTUALBOX_VERSION}-${VIRTUALBOX_REVISION}-Win.exe /bundle/virtualbox.exe
 RUN wine virtualbox.exe -extract -silent -path . && \
 	  rm virtualbox.exe && \
-	  rm *x86.msi && \
-	  mv *_amd64.msi VirtualBox_amd64.msi
+	  mv *.msi VirtualBox_amd64.msi
 
 COPY certs/win /certs
 
-RUN /osslsigncode/osslsigncode-1.7.1/osslsigncode sign -certs /certs/bundle.crt -key /certs/codesign.key -h sha256 -n "Nanobox" -i "http://nanobox.io" -t "http://timestamp.verisign.com/scripts/timstamp.dll" -in /bundle/nanobox.exe -out /bundle/nanobox-signed.exe && \
-    cp /bundle/nanobox-signed.exe /bundle/nanobox.exe
+RUN osslsigncode sign \
+        -certs /certs/bundle.crt \
+        -key /certs/codesign.key \
+        -h sha256 \
+        -n "Microbox" \
+        -i "http://microbox.cloud" \
+        -t "http://timestamp.digicert.com/" \
+        -in /bundle/microbox.exe \
+        -out /bundle/microbox-signed.exe && \
+    cp /bundle/microbox-signed.exe /bundle/microbox.exe
 
-RUN /osslsigncode/osslsigncode-1.7.1/osslsigncode sign -certs /certs/bundle.crt -key /certs/codesign.key -h sha256 -n "Nanobox Updater" -i "http://nanobox.io" -t "http://timestamp.verisign.com/scripts/timstamp.dll" -in /bundle/nanobox-update.exe -out /bundle/nanobox-update-signed.exe && \
-    cp /bundle/nanobox-update-signed.exe /bundle/nanobox-update.exe
+RUN osslsigncode sign \
+        -certs /certs/bundle.crt \
+        -key /certs/codesign.key \
+        -h sha256 \
+        -n "Microbox Updater" \
+        -i "http://microbox.cloud" \
+        -t "http://timestamp.digicert.com/" \
+        -in /bundle/microbox-update.exe \
+        -out /bundle/microbox-update-signed.exe && \
+    cp /bundle/microbox-update-signed.exe /bundle/microbox-update.exe
 
-RUN /osslsigncode/osslsigncode-1.7.1/osslsigncode sign -certs /certs/bundle.crt -key /certs/codesign.key -h sha256 -n "Nanobox Updater" -i "http://nanobox.io" -t "http://timestamp.verisign.com/scripts/timstamp.dll" -in /bundle/nanobox-vpn.exe -out /bundle/nanobox-vpn-signed.exe && \
-    cp /bundle/nanobox-vpn-signed.exe /bundle/nanobox-vpn.exe
+RUN osslsigncode sign \
+        -certs /certs/bundle.crt \
+        -key /certs/codesign.key \
+        -h sha256 \
+        -n "Microbox Updater" \
+        -i "http://microbox.cloud" \
+        -t "http://timestamp.digicert.com/" \
+        -in /bundle/microbox-vpn.exe \
+        -out /bundle/microbox-vpn-signed.exe && \
+    cp /bundle/microbox-vpn-signed.exe /bundle/microbox-vpn.exe
 
-RUN /osslsigncode/osslsigncode-1.7.1/osslsigncode sign -certs /certs/bundle.crt -key /certs/codesign.key -h sha256 -n "Nanobox Updater" -i "http://nanobox.io" -t "http://timestamp.verisign.com/scripts/timstamp.dll" -in /bundle/nanobox-machine.exe -out /bundle/nanobox-machine-signed.exe && \
-    cp /bundle/nanobox-machine-signed.exe /bundle/nanobox-machine.exe
+RUN osslsigncode sign \
+        -certs /certs/bundle.crt \
+        -key /certs/codesign.key \
+        -h sha256 \
+        -n "Microbox Updater" \
+        -i "http://microbox.cloud" \
+        -t "http://timestamp.digicert.com/" \
+        -in /bundle/microbox-machine.exe \
+        -out /bundle/microbox-machine-signed.exe && \
+    cp /bundle/microbox-machine-signed.exe /bundle/microbox-machine.exe
 
 WORKDIR /installer
 RUN rm -rf /tmp/.wine-0/
@@ -77,8 +107,16 @@ RUN rm -rf /tmp/.wine-0/
 COPY windows-bundle /installer
 
 # Uncomment once we're ready to integrate with mixpanel
-# RUN wine ../innosetup/ISCC.exe NanoboxSetup.iss /DMyAppVersion=$INSTALLER_VERSION /DMixpanelToken=$MIXPANEL_TOKEN
-RUN wine ../innosetup/ISCC.exe nanobox.iss /DMyAppVersion=$INSTALLER_VERSION
+# RUN wine ../innosetup/ISCC.exe MicroboxSetup.iss /DMyAppVersion=${INSTALLER_VERSION} /DMixpanelToken=${MIXPANEL_TOKEN}
+RUN wine ../innosetup/ISCC.exe microbox.iss /DMyAppVersion=${INSTALLER_VERSION}
 
-RUN /osslsigncode/osslsigncode-1.7.1/osslsigncode sign -certs /certs/bundle.crt -key /certs/codesign.key -h sha256 -n "Nanobox installer" -i "http://nanobox.io" -t "http://timestamp.verisign.com/scripts/timstamp.dll" -in /installer/Output/NanoboxSetup.exe -out /installer/Output/NanoboxSetup-signed.exe && \
-    cp /installer/Output/NanoboxSetup-signed.exe /installer/Output/NanoboxBundleSetup.exe
+RUN osslsigncode sign \
+        -certs /certs/bundle.crt \
+        -key /certs/codesign.key \
+        -h sha256 \
+        -n "Microbox installer" \
+        -i "http://microbox.cloud" \
+        -t "http://timestamp.digicert.com/" \
+        -in /installer/Output/MicroboxSetup.exe \
+        -out /installer/Output/MicroboxSetup-signed.exe && \
+    cp /installer/Output/MicroboxSetup-signed.exe /installer/Output/MicroboxBundleSetup.exe

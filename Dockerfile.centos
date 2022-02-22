@@ -44,6 +44,8 @@ RUN chmod +x /fakeroot/arm64/usr/local/bin/microbox-machine
 # EVENTUALLY, DOCKER-MACHINE WILL BE REMOVED FROM ALL VARIANTS OF MICROBOX, BUT ONE STEP AT A TIME.
 
 # Create Package
-RUN fpm -t rpm -n microbox -a amd64 -v ${INSTALLER_VERSION} -s dir /fakeroot/amd64/usr/local/bin/=/usr/local/bin/
-RUN fpm -t rpm -n microbox -a arm64 -v ${INSTALLER_VERSION} -s dir /fakeroot/arm64/usr/local/bin/=/usr/local/bin/
-RUN fpm -t rpm -n microbox -a s390x -v ${INSTALLER_VERSION} -s dir /fakeroot/s390x/usr/local/bin/=/usr/local/bin/
+COPY descfile /
+
+RUN fpm -t rpm -a amd64 -n microbox --description "$(cat /descfile)" -v ${INSTALLER_VERSION} -s dir /fakeroot/amd64/usr/local/bin/=/usr/local/bin/
+RUN fpm -t rpm -a arm64 -n microbox --description "$(cat /descfile)" -v ${INSTALLER_VERSION} -s dir /fakeroot/arm64/usr/local/bin/=/usr/local/bin/
+RUN fpm -t rpm -a s390x -n microbox --description "$(cat /descfile)" -v ${INSTALLER_VERSION} -s dir /fakeroot/s390x/usr/local/bin/=/usr/local/bin/

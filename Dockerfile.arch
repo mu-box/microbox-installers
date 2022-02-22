@@ -26,4 +26,6 @@ RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox-machine "https://github
 RUN chmod +x /fakeroot/amd64/usr/local/bin/microbox-machine
 
 # Create Package
-RUN fpm -t pacman -n microbox -v $INSTALLER_VERSION -s dir /fakeroot/amd64/usr/local/bin/=/usr/bin/
+COPY descfile /
+
+RUN fpm -t pacman -a amd64 -n microbox --description "$(cat /descfile)" -v $INSTALLER_VERSION -s dir /fakeroot/amd64/usr/local/bin/=/usr/bin/

@@ -72,3 +72,17 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           make publish
+
+  discord:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Spam Discord (BUT NOT LITERALLY!)
+        uses: sarisia/actions-status-discord@v1
+        if: github.actor != 'nektos/act'
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          nodetail: true
+          title: A new version of the Microbox installer just dropped!
+          description: |
+            Click [here](https://microbox.cloud/downloads) to download!

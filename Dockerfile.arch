@@ -6,26 +6,46 @@ ARG VIRTUALBOX_VERSION
 ARG VIRTUALBOX_REVISION
 ARG DOCKER_MACHINE_VERSION
 
-# Make directory for files to live in
+# Make directories for files to live in
 RUN mkdir -p /fakeroot/amd64/usr/local/bin
+RUN mkdir -p /fakeroot/arm/usr/local/bin
+RUN mkdir -p /fakeroot/arm64/usr/local/bin
 
 # fetch microbox
-RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v$MICROBOX_VERSION/linux/amd64/microbox"
+RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/amd64/microbox"
 RUN chmod +x /fakeroot/amd64/usr/local/bin/microbox
+RUN curl -fsSL -o /fakeroot/arm/usr/local/bin/microbox "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/arm/microbox"
+RUN chmod +x /fakeroot/arm/usr/local/bin/microbox
+RUN curl -fsSL -o /fakeroot/arm64/usr/local/bin/microbox "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/arm64/microbox"
+RUN chmod +x /fakeroot/arm64/usr/local/bin/microbox
 
 # fetch microbox-update
-RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox-update "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v$MICROBOX_VERSION/linux/amd64/microbox-update"
+RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox-update "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/amd64/microbox-update"
 RUN chmod +x /fakeroot/amd64/usr/local/bin/microbox-update
+RUN curl -fsSL -o /fakeroot/arm/usr/local/bin/microbox-update "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/arm/microbox-update"
+RUN chmod +x /fakeroot/arm/usr/local/bin/microbox-update
+RUN curl -fsSL -o /fakeroot/arm64/usr/local/bin/microbox-update "https://s3.amazonaws.com/tools.microbox.cloud/microbox/v${MICROBOX_VERSION}/linux/arm64/microbox-update"
+RUN chmod +x /fakeroot/arm64/usr/local/bin/microbox-update
 
 # fetch openvpn
 RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox-vpn "https://s3.amazonaws.com/tools.microbox.cloud/openvpn/linux/amd64/openvpn"
 RUN chmod +x /fakeroot/amd64/usr/local/bin/microbox-vpn
+RUN curl -fsSL -o /fakeroot/arm/usr/local/bin/microbox-vpn "https://s3.amazonaws.com/tools.microbox.cloud/openvpn/linux/arm/openvpn"
+RUN chmod +x /fakeroot/arm/usr/local/bin/microbox-vpn
+RUN curl -fsSL -o /fakeroot/arm64/usr/local/bin/microbox-vpn "https://s3.amazonaws.com/tools.microbox.cloud/openvpn/linux/arm64/openvpn"
+RUN chmod +x /fakeroot/arm64/usr/local/bin/microbox-vpn
 
 # fetch docker-machine
-RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox-machine "https://github.com/docker/machine/releases/download/v$DOCKER_MACHINE_VERSION/docker-machine-Linux-x86_64"
+RUN curl -fsSL -o /fakeroot/amd64/usr/local/bin/microbox-machine "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-x86_64"
 RUN chmod +x /fakeroot/amd64/usr/local/bin/microbox-machine
+RUN curl -fsSL -o /fakeroot/arm/usr/local/bin/microbox-machine "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-armhf"
+RUN chmod +x /fakeroot/arm/usr/local/bin/microbox-machine
+RUN curl -fsSL -o /fakeroot/arm64/usr/local/bin/microbox-machine "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-aarch64"
+RUN chmod +x /fakeroot/arm64/usr/local/bin/microbox-machine
 
 # Create Package
 COPY descfile /
 
 RUN fpm -t pacman -a amd64 -n microbox --description "$(cat /descfile)" -v $INSTALLER_VERSION -s dir /fakeroot/amd64/usr/local/bin/=/usr/bin/
+RUN fpm -t pacman -a armhf -n microbox --description "$(cat /descfile)" -v $INSTALLER_VERSION -s dir /fakeroot/arm/usr/local/bin/=/usr/bin/
+RUN fpm -t pacman -a arm64 -n microbox --description "$(cat /descfile)" -v $INSTALLER_VERSION -s dir /fakeroot/arm64/usr/local/bin/=/usr/bin/

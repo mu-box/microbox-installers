@@ -113,11 +113,11 @@ urls:
 	@echo https://s3.amazonaws.com/tools.microbox.cloud/installers/v${INSTALLER_VERSION}/linux/microbox-${INSTALLER_VERSION}-1-x86_64.pkg.tar.xz
 	@echo https://s3.amazonaws.com/tools.microbox.cloud/installers/v${INSTALLER_VERSION}/linux/microbox-${INSTALLER_VERSION}.tar.gz
 	# @echo CloudFront:
-	# @echo https://d1ormdui8qdvue.cloudfront.net/installers/v${INSTALLER_VERSION}/mac/Microbox.pkg
-	# @echo https://d1ormdui8qdvue.cloudfront.net/installers/v${INSTALLER_VERSION}/mac/MicroboxBundle.pkg
-	# @echo https://d1ormdui8qdvue.cloudfront.net/installers/v${INSTALLER_VERSION}/windows/MicroboxSetup.exe
-	# @echo https://d1ormdui8qdvue.cloudfront.net/installers/v${INSTALLER_VERSION}/windows/MicroboxBundleSetup.exe
-	# @echo https://d1ormdui8qdvue.cloudfront.net/installers/v${INSTALLER_VERSION}/linux/microbox-${INSTALLER_VERSION}-1.x86_64.rpm
-	# @echo https://d1ormdui8qdvue.cloudfront.net/installers/v${INSTALLER_VERSION}/linux/microbox_${INSTALLER_VERSION}_amd64.deb
-	# @echo https://d1ormdui8qdvue.cloudfront.net/installers/v${INSTALLER_VERSION}/linux/microbox-${INSTALLER_VERSION}-1-x86_64.pkg.tar.xz
-	# @echo https://d1ormdui8qdvue.cloudfront.net/installers/v${INSTALLER_VERSION}/linux/microbox-${INSTALLER_VERSION}.tar.gz
+	# @echo https://s3.amazonaws.com/tools.microbox.cloud/installers/v${INSTALLER_VERSION}/mac/Microbox.pkg
+	# @echo https://s3.amazonaws.com/tools.microbox.cloud/installers/v${INSTALLER_VERSION}/mac/MicroboxBundle.pkg
+	# @echo https://s3.amazonaws.com/tools.microbox.cloud/installers/v${INSTALLER_VERSION}/windows/MicroboxSetup.exe
+	# @echo https://s3.amazonaws.com/tools.microbox.cloud/installers/v${INSTALLER_VERSION}/windows/MicroboxBundleSetup.exe
+	# @echo https://s3.amazonaws.com/tools.microbox.cloud/installers/v${INSTALLER_VERSION}/linux/microbox-${INSTALLER_VERSION}-1.x86_64.rpm
+	# @echo https://s3.amazonaws.com/tools.microbox.cloud/installers/v${INSTALLER_VERSION}/linux/microbox_${INSTALLER_VERSION}_amd64.deb
+	# @echo https://s3.amazonaws.com/tools.microbox.cloud/installers/v${INSTALLER_VERSION}/linux/microbox-${INSTALLER_VERSION}-1-x86_64.pkg.tar.xz
+	# @echo https://s3.amazonaws.com/tools.microbox.cloud/installers/v${INSTALLER_VERSION}/linux/microbox-${INSTALLER_VERSION}.tar.gz

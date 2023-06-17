@@ -20,7 +20,7 @@ Vagrant.configure(2) do |config|
 
       # add the source to our apt sources
       echo \
-        "deb https://apt.dockerproject.org/repo ubuntu-trusty main \n" \
+        "deb https://download.docker.com/linux/ubuntu trusty main \n" \
           > /etc/apt/sources.list.d/docker.list
 
       # update the package index
